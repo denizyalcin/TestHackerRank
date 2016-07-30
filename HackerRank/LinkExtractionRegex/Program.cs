@@ -19,7 +19,7 @@ namespace LinkExtractionRegex
             System.IO.StreamReader file = null;
             try
             {
-                file = new System.IO.StreamReader(@"..\..\test4.txt");
+                file = new System.IO.StreamReader(@"..\..\TestData\test4.txt");
             }
             catch (Exception)
             {
@@ -50,8 +50,7 @@ namespace LinkExtractionRegex
                 }
 
                 //find a tag and get outer html
-                //Regex rex = new Regex("<\\ba\\b[^>]*>[^<]*(?:<(?!<\\/a>))*\\/\\ba\\b>");
-                Regex rex = new Regex("<\\s*a\\s*[^>]*href\\s*=\\s*(?:\"|')([^\"']*)(?:\"|')(!?.(?!<\\s*\\/\\s*a))*.<\\s*\\/\\s*a[^>]*>");
+                Regex rex = new Regex(RegexLib.Tag);
 
                 Match match = rex.Match(line);
 
@@ -60,10 +59,10 @@ namespace LinkExtractionRegex
                     string matchString = match.Value;
 
                     // a tag find href inner text
-                    Regex findHref = new Regex("\\s*a\\s*[^>]*href\\s*=\\s*(?:\"|')([^\"']*)(?:\"|')");
+                    Regex findHref = new Regex(RegexLib.ATagWithHref);
 
                     // find tags in match
-                    Regex removeTags = new Regex("<[^>]*>");
+                    Regex removeTags = new Regex(RegexLib.Tag);
 
                     string href = findHref.Match(matchString).Success ? findHref.Match(matchString).Groups[1].Value : "";
                     string contentText = removeTags.Replace(matchString, "");
